@@ -1,0 +1,6 @@
+@RestWithASPNET5_HostAddress = http://localhost:5068
+
+GET {{RestWithASPNET5_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,48 +1,66 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using RestWithASPNET.Model;
+using RestWithASPNET.Services;
 
 
 namespace RestWithASPNET.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CalculatorController : ControllerBase
+    [Route("api/[controller]")]
+    public class PersonController : ControllerBase
     {
-        private readonly ILogger<CalculatorController> _logger;
+        private readonly ILogger<PersonController> _logger;
+        private IPersonService _personService;
 
-        public CalculatorController(ILogger<CalculatorController> logger)
+        public PersonController(ILogger<PersonController> logger, IPersonService personService)
         {
             _logger = logger;
+            _personService = personService;
         }
         #region verbo Get
-        [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Sum(string firstNumber, string secondNumber)
+        [HttpGet]
+        public IActionResult Get()
         {
-            return BadRequest("Invalid imput");
+            return Ok(_personService.FindAll());
         }
-        #endregion
-        #region metodo conferir dados numericos 
-        private bool IsNumeric(string strNumber)
+
+        [HttpGet("{id}")]
+        public IActionResult Get(long id)
         {
-            double number;
-            bool isNumber = double.TryParse(strNumber,
-                NumberStyles.Any,
-                NumberFormatInfo.InvariantInfo,
-                out number);
-            return isNumber;
-        }
-        #endregion
-        #region metodo conversão para decimal 
-        private decimal ConvertToDecimal(string strNumber)
-        {
-            decimal decimalValue;
-            if (decimal.TryParse(strNumber, out decimalValue))
+            var person = _personService.FindById(id);
+            if (person == null)
             {
-                return decimalValue;
+                return NotFound();
             }
-            return 0;
+            return Ok(person);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Person person)
+        {
+            if (person == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_personService.Create(person));
+        }
+        [HttpPut]
+        public IActionResult Put([FromBody] Person person)
+        {
+            if (person == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_personService.Update(person));
         }
         #endregion
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            _personService.Delete(id);
+            return NoContent();
+        }
     }
 }
- 

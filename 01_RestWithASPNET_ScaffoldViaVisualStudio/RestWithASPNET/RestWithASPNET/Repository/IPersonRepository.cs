@@ -1,8 +1,8 @@
 ﻿using RestWithASPNET.Model;
 
-namespace RestWithASPNET.Services
+namespace RestWithASPNET.Repository
 {
-    public interface IPersonService
+    public interface IPersonRepository
     {
         //métodos da Interface 
       
@@ -15,6 +15,9 @@ namespace RestWithASPNET.Services
         Person Update(Person person);
 
         void Delete(long id);
-        
+
+        bool Exists(long id);
+
+
     }
 }

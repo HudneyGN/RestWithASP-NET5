@@ -1,15 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using RestWithASPNET.Model.Context;
-using System.Collections.Generic;
 using RestWithASPNET.Business;
 using RestWithASPNET.Business.Implementations;
-using RestWithASPNET.Repository.Implementations;
+//using RestWithASPNET.Repository.Implementations;
 using RestWithASPNETErudio.Model.Context;
 using RestWithASPNET.Repository;
 using MySqlConnector;
 using EvolveDb;
 using Serilog;
-using System.Security.Cryptography.X509Certificates;
+using RestWithASPNET.Repository.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,9 +32,10 @@ builder.Services.AddApiVersioning();
 
 //Dependency Injection
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
+//builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
-builder.Services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 

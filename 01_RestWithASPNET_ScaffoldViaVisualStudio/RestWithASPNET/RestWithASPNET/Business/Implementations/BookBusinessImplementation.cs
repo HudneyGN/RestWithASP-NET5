@@ -1,4 +1,7 @@
-﻿using RestWithASPNET.Model;
+﻿using ReRestWithASPNET.Data.VO;
+using RestWithASPNET.Data.Converter.Implementations;
+using RestWithASPNET.Data.VO;
+using RestWithASPNET.Model;
 using RestWithASPNET.Repository;
 using RestWithASPNETErudio.Model.Context;
 using System;
@@ -9,22 +12,27 @@ namespace RestWithASPNET.Business.Implementations
     {
         private readonly IRepository<Book> _repository;
 
+        private readonly BookConverter _converter;
+
         public BookBusinessImplementation(IRepository<Book> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Book FindById(long id)
+        public BookVO FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
-        public Book Create(Book book)
+        public BookVO Create(BookVO book)
         {
-            return _repository.Create(book);
+            var bookEntity = _converter.Parse(book);
+            bookEntity = _repository.Create(bookEntity);
+            return _converter.Parse(bookEntity);
         }
 
         public void Delete(long id)
@@ -32,14 +40,11 @@ namespace RestWithASPNET.Business.Implementations
             _repository.Delete(id);
         }
 
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
-        }
-
-        Person IBookBusiness.FindById(long id)
-        {
-            throw new NotImplementedException();
+            var bookEntity = _converter.Parse(book);
+            bookEntity = _repository.Update(bookEntity);
+            return _converter.Parse(bookEntity);
         }
     }
 }

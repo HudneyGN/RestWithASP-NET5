@@ -1,4 +1,5 @@
-﻿using RestWithASPNET.Model;
+﻿using ReRestWithASPNET.Data.VO;
+using RestWithASPNET.Model;
 
 namespace RestWithASPNET.Business
 {
@@ -6,13 +7,13 @@ namespace RestWithASPNET.Business
     {
         //métodos da Interface 
       
-        Book Create(Book book);
+        BookVO Create(BookVO book);
 
-        Person FindById(long id);
+        BookVO FindById(long id);
 
-        List<Book> FindAll();
+        List<BookVO> FindAll();
 
-        Book Update(Book book);
+        BookVO Update(BookVO book);
 
         void Delete(long id);
         

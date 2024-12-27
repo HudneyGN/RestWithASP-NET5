@@ -1,6 +1,7 @@
 using System.Globalization;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using ReRestWithASPNET.Data.VO;
 using RestWithASPNET.Business;
 using RestWithASPNET.Model;
 
@@ -30,16 +31,16 @@ namespace RestWithASPNET.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var person = _bookBusiness.FindById(id);
-            if (person == null)
+            var book = _bookBusiness.FindById(id);
+            if (book == null)
             {
                 return NotFound();
             }
-            return Ok(person);
+            return Ok(book);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null)
             {
@@ -48,7 +49,7 @@ namespace RestWithASPNET.Controllers
             return Ok(_bookBusiness.Create(book));
         }
         [HttpPut]
-        public IActionResult Put([FromBody] Book book)
+        public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null)
             {
